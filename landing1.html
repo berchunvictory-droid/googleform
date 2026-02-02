@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title> <!-- заголовок будет подставлен -->
+  <style>
+    /* ── СТИЛЬ 1 ── Огненно-красный, агрессивный ── */
+    body {
+      margin:0; height:100vh; background:linear-gradient(135deg, #4b0000, #8b0000);
+      color:#fff; font-family:system-ui; display:flex; justify-content:center; align-items:center;
+    }
+    .container {
+      text-align:center; padding:60px 40px; background:rgba(0,0,0,0.65);
+      border-radius:22px; border:3px solid #ff4500; box-shadow:0 0 70px #ff4500aa;
+      max-width:520px; width:92%;
+    }
+    .logo { font-size:5rem; font-weight:900; color:#ff4500; text-shadow:0 0 25px #ff4500; margin-bottom:20px; }
+    .bonus { font-size:4.8rem; font-weight:900; color:#ffd700; margin:25px 0; }
+    h2 { font-size:2.2rem; margin:0 0 20px; line-height:1.3; }
+    p { font-size:1.4rem; color:#ffcc99; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="logo" id="casinoName"></div>
+  <h2 id="headline"></h2>
+  <div class="bonus" id="bonusAmount"></div>
+  <p id="subtext"></p>
+</div>
+
+<script>
+  // Читаем параметры из URL
+  const params = new URLSearchParams(window.location.search);
+  const casino = decodeURIComponent(params.get("c") || "CASINO");
+  const bonus  = params.get("b") || "5000";
+  const encUrl = params.get("r");
+
+  if (!encUrl) {
+    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;">Invalid link</h1>';
+    throw new Error("No redirect");
+  }
+
+  // Подставляем значения
+  document.getElementById("casinoName").textContent = casino;
+  document.getElementById("bonusAmount").textContent = "$" + bonus;
+  document.title = casino + " – $" + bonus + " Bonus";
+
+  // Разные тексты для каждого преленда (можно менять)
+  const texts = [
+    { h: "Don’t miss out! $" + bonus + " BONUS for new players – win big NOW!", p: "Your lucky break is waiting!" },
+    { h: "Exclusive $" + bonus + " bonus – your chance to hit the jackpot!", p: "Thousands are winning right now!" },
+    { h: "Last chance! $" + bonus + " BONUS – don’t let it slip away!", p: "Claim it before time runs out!" },
+    { h: "Only for bold players: Unlock $" + bonus + " bonus and play big!", p: "Your big win starts here!" },
+    { h: "Time’s running out! Get your $" + bonus + " bonus and start winning TODAY!", p: "Grab it fast!" }
+  ];
+
+  // Рандомный текст внутри одного преленда (для разнообразия)
+  const randomText = texts[Math.floor(Math.random() * texts.length)];
+  document.getElementById("headline").textContent = randomText.h;
+  document.getElementById("subtext").textContent = randomText.p;
+
+  // Таймер и редирект
+  let sec = 3;
+  const interval = setInterval(() => {
+    if (--sec <= 0) {
+      clearInterval(interval);
+      try {
+        location.replace(atob(encUrl));
+      } catch (e) {
+        document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;">Error</h1>';
+      }
+    }
+  }, 1000);
+</script>
+</body>
+</html>
