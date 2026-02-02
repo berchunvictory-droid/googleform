@@ -4,76 +4,69 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title></title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin:0; height:100vh; background:#000; color:#fff;
-      font-family:'Orbitron', monospace; overflow:hidden;
-      display:flex; justify-content:center; align-items:center;
-    }
-    .glass {
-      position:relative; width:90%; max-width:600px; padding:80px 40px;
-      background:rgba(255,255,255,0.04); backdrop-filter:blur(16px);
-      border:1px solid rgba(255,255,255,0.08); border-radius:32px;
-      box-shadow:0 8px 32px rgba(0,0,0,0.6);
-      text-align:center;
-    }
-    .logo {
-      font-size:3.8rem; font-weight:900; letter-spacing:6px;
-      background:linear-gradient(90deg, #ff00cc, #00ffcc); -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent; margin:0 0 40px;
-    }
-    .timer {
-      font-size:9rem; font-weight:900; line-height:0.9;
-      background:linear-gradient(90deg, #00ffcc, #ff00cc); -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent; margin:0;
-    }
-    h2 { font-size:2.1rem; margin:40px 0 20px; opacity:0.9; }
-    p { font-size:1.3rem; opacity:0.7; }
+    body { margin:0; height:100vh; background:#0a001f; color:#e0ffff; font-family:system-ui; display:flex; justify-content:center; align-items:center; }
+    .container { text-align:center; padding:60px 45px; background:linear-gradient(145deg, #0f0033, #1a004d); border-radius:28px; border:2px solid #00ffff66; box-shadow:0 0 80px #00ffff44; max-width:520px; width:90%; }
+    .logo { font-size:4.8rem; font-weight:900; color:#00ffff; text-shadow:0 0 30px #00ffff; margin:0 0 20px; letter-spacing:3px; }
+    .spinner { width:90px; height:90px; border:10px solid #00ffff22; border-top:10px solid #00ffff; border-radius:50%; animation:spin 1.5s linear infinite; margin:0 auto 40px; }
+    .timer { font-size:5.5rem; font-weight:900; color:#ff00ff; text-shadow:0 0 35px #ff00ff; margin:20px 0; }
+    h2 { font-size:2.2rem; margin:0 0 18px; }
+    p { font-size:1.4rem; color:#ccffff; }
+    @keyframes spin { to { transform:rotate(360deg); } }
   </style>
 </head>
 <body>
-<div class="glass">
+<div class="container">
   <div class="logo" id="casinoName"></div>
-  <div class="timer" id="bonusAmount"></div>
+  <div class="spinner"></div>
   <h2 id="headline"></h2>
+  <div class="timer" id="count">3</div>
   <p id="subtext"></p>
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const casino = decodeURIComponent(params.get("c") || "CASINO");
-const bonus  = params.get("b") || "5000";
-const encUrl = params.get("r");
+  const params = new URLSearchParams(window.location.search);
+  const casino = decodeURIComponent(params.get("c") || "CASINO");
+  const bonus  = params.get("b") || "5000";
+  const encUrl = params.get("r");
 
-if (!encUrl) throw new Error("No redirect");
-
-document.getElementById("casinoName").textContent = casino;
-document.getElementById("bonusAmount").textContent = "$" + bonus;
-document.title = casino + " – $" + bonus + " Bonus";
-
-const texts = [
-  { h: "Don’t miss out! $" + bonus + " BONUS for new players – win big NOW!", p: "Your lucky break is waiting!" },
-  { h: "Exclusive $" + bonus + " bonus – your chance to hit the jackpot!", p: "Thousands are winning right now!" },
-  { h: "Last chance! $" + bonus + " BONUS – don’t let it slip away!", p: "Claim it before time runs out!" },
-  { h: "Only for bold players: Unlock $" + bonus + " bonus and play big!", p: "Your big win starts here!" },
-  { h: "Time’s running out! Get your $" + bonus + " bonus and start winning TODAY!", p: "Grab it fast!" }
-];
-
-const randomText = texts[Math.floor(Math.random() * texts.length)];
-document.getElementById("headline").textContent = randomText.h;
-document.getElementById("subtext").textContent = randomText.p;
-
-let sec = 3;
-const interval = setInterval(() => {
-  if (--sec <= 0) {
-    clearInterval(interval);
-    try { location.replace(atob(encUrl)); }
-    catch(e) { document.body.innerHTML = '<h1>Error</h1>'; }
+  if (!encUrl) {
+    document.body.innerHTML = '<h1 style="text-align:center; margin-top:40vh; color:#fff; font-size:2rem;">Invalid link</h1>';
+    throw new Error("No redirect parameter");
   }
-}, 1000);
+
+  document.getElementById("casinoName").textContent = casino;
+  document.getElementById("bonusAmount").textContent = "$" + bonus;
+  document.title = casino + " – $" + bonus + " Bonus";
+
+  const texts = [
+    { h: `Don't miss out! $${bonus} BONUS for new players – win big NOW!`, p: "Your lucky break: Grab a $${bonus} bonus before it’s gone!" },
+    { h: `Exclusive $${bonus} bonus for new users – your chance to hit the jackpot!`, p: "Time’s running out! Get a $${bonus} bonus and start winning today!" },
+    { h: `Only for bold players: Unlock a $${bonus} bonus and play big!`, p: "Feel the thrill! $${bonus} bonus for new users to boost your game!" },
+    { h: `Last chance for a $${bonus} bonus – don’t let it slip away!`, p: "Your big win starts with a $${bonus} bonus! Don’t wait, claim it" },
+    { h: `Limited offer: $${bonus} bonus for new players to dominate the game!`, p: "Be a winner today! Grab your exclusive $${bonus} bonus now!" }
+  ];
+
+  const randomText = texts[Math.floor(Math.random() * texts.length)];
+  document.getElementById("headline").textContent = randomText.h;
+  document.getElementById("subtext").textContent = randomText.p;
+
+  let sec = 3;
+  const timerEl = document.getElementById("count");
+  timerEl.textContent = sec;
+
+  const interval = setInterval(() => {
+    sec--;
+    timerEl.textContent = sec;
+    if (sec <= 0) {
+      clearInterval(interval);
+      try {
+        window.location.replace(atob(encUrl));
+      } catch (e) {
+        document.body.innerHTML = '<h1 style="text-align:center; margin-top:40vh; color:#fff;">Redirect error</h1>';
+      }
+    }
+  }, 1000);
 </script>
 </body>
 </html>
