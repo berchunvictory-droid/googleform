@@ -6,68 +6,47 @@
   <title></title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
-    body{min-height:100vh;background:linear-gradient(135deg,#1a0a00,#2d1400,#1a0a00);color:#fff;font-family:system-ui,-apple-system,sans-serif;display:flex;justify-content:center;align-items:center;padding:15px}
-    .container{text-align:center;padding:35px 25px;background:linear-gradient(180deg,rgba(45,20,0,0.9),rgba(26,10,0,0.95));border-radius:16px;border:2px solid #f97316;box-shadow:0 0 60px rgba(249,115,22,0.3);width:100%;max-width:420px}
-    .fire{font-size:2.5rem;margin-bottom:10px;animation:burn 0.5s infinite alternate}
-    @keyframes burn{from{transform:scale(1)}to{transform:scale(1.1)}}
-    .logo{font-size:clamp(1.6rem,6vw,2.4rem);font-weight:900;color:#f97316;text-shadow:0 0 20px rgba(249,115,22,0.8);margin-bottom:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .hot-badge{display:inline-block;background:linear-gradient(135deg,#f97316,#ea580c);padding:8px 20px;border-radius:20px;margin-bottom:15px}
-    .hot-badge span{font-size:clamp(0.8rem,3vw,1rem);font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:2px}
-    .bonus-amount{font-size:clamp(3rem,13vw,4.5rem);font-weight:900;color:#fbbf24;text-shadow:0 0 30px rgba(251,191,36,0.6);margin:15px 0}
-    .timer{font-size:clamp(4rem,16vw,5.5rem);font-weight:900;color:#f97316;text-shadow:0 0 40px rgba(249,115,22,0.7);margin:20px 0;animation:pulse 1s infinite}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
-    .message{font-size:clamp(1rem,4vw,1.25rem);color:#fed7aa;margin-bottom:10px}
-    .submessage{font-size:clamp(0.85rem,3vw,1rem);color:#fb923c}
+    body{min-height:100vh;background:linear-gradient(180deg,#1a1005 0%,#2a1a0a 50%,#1a1005 100%);color:#fff;font-family:system-ui,-apple-system,sans-serif;display:flex;justify-content:center;align-items:center;padding:15px}
+    .container{text-align:center;padding:40px 30px;background:linear-gradient(145deg,#2a2010,#1a1408);border-radius:24px;border:1px solid rgba(255,180,50,0.15);box-shadow:0 25px 80px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.05);width:100%;max-width:400px}
+    .logo{font-size:clamp(1.5rem,6vw,2.2rem);font-weight:900;background:linear-gradient(180deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:20px;white-space:nowrap;letter-spacing:1px}
+    .icon{font-size:3.5rem;margin-bottom:15px;filter:drop-shadow(0 4px 15px rgba(255,180,50,0.5));animation:shine 2s ease-in-out infinite}
+    @keyframes shine{0%,100%{filter:drop-shadow(0 4px 15px rgba(255,180,50,0.5))}50%{filter:drop-shadow(0 4px 30px rgba(255,220,100,0.8))}}
+    .bonus{font-size:clamp(3rem,14vw,4.5rem);font-weight:900;background:linear-gradient(180deg,#ffd700,#ffb800,#ff9500);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 4px 20px rgba(255,180,0,0.3));margin:10px 0}
+    .label{font-size:clamp(0.7rem,2.5vw,0.85rem);color:#fbbf24;text-transform:uppercase;letter-spacing:4px;margin-bottom:25px}
+    .message{font-size:clamp(1rem,4vw,1.2rem);color:#e0e0e0;margin-bottom:15px}
+    .timer{font-size:clamp(3.5rem,15vw,5rem);font-weight:800;color:rgba(255,255,255,0.9);text-shadow:0 4px 30px rgba(0,0,0,0.3);margin:15px 0}
+    .progress{width:100%;height:6px;background:#3a2a15;border-radius:3px;margin:25px 0 15px;overflow:hidden}
+    .progress-bar{height:100%;background:linear-gradient(90deg,#b45309,#f59e0b,#fbbf24,#ffd700);border-radius:3px;animation:load 3s linear forwards}
+    @keyframes load{from{width:0%}to{width:100%}}
+    .submessage{font-size:clamp(0.85rem,3vw,0.95rem);color:#fbbf24}
   </style>
 </head>
 <body>
 <div class="container">
-  <div class="fire">🔥</div>
   <div class="logo" id="casinoName"></div>
-  <div class="hot-badge"><span>Hot Bonus</span></div>
-  <div class="bonus-amount" id="bonusAmount"></div>
+  <div class="icon">🏆</div>
+  <div class="bonus" id="bonusAmount"></div>
+  <div class="label">Winner Bonus</div>
   <div class="message" id="headline"></div>
   <div class="timer" id="count">3</div>
+  <div class="progress"><div class="progress-bar"></div></div>
   <div class="submessage" id="subtext"></div>
 </div>
-
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const casino = params.get("c") || "CASINO";
-  const bonus = params.get("b") || "5000";
-  const encUrl = params.get("r");
-
-  if (!encUrl) {
-    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#f97316;font-size:1.5rem">Invalid link</h1>';
-    throw new Error("No redirect");
-  }
-
-  document.getElementById("casinoName").textContent = casino;
-  document.getElementById("bonusAmount").textContent = "$" + bonus;
-  document.title = casino + " — $" + bonus;
-
-  const texts = [
-    {h:"Blazing hot bonus!", s:"Feel the heat..."},
-    {h:"Fire bonus activated!", s:"Burning rewards..."},
-    {h:"Red hot welcome!", s:"Sizzling prize incoming..."},
-    {h:"Inferno bonus!", s:"Maximum heat..."},
-    {h:"Flaming jackpot!", s:"On fire..."}
-  ];
-  const t = texts[Math.floor(Math.random()*texts.length)];
-  document.getElementById("headline").textContent = t.h;
-  document.getElementById("subtext").textContent = t.s;
-
-  let sec = 3;
-  const timerEl = document.getElementById("count");
-  const interval = setInterval(() => {
-    sec--;
-    timerEl.textContent = sec;
-    if (sec <= 0) {
-      clearInterval(interval);
-      try { window.location.replace(atob(encUrl)); }
-      catch(e) { document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff">Error</h1>'; }
-    }
-  }, 1000);
+  const params=new URLSearchParams(window.location.search);
+  const casino=params.get("c")||"CASINO";
+  const bonus=params.get("b")||"5000";
+  const encUrl=params.get("r");
+  if(!encUrl){document.body.innerHTML='<h1 style="text-align:center;margin-top:40vh;color:#fbbf24">Invalid link</h1>';throw new Error("No redirect");}
+  document.getElementById("casinoName").textContent=casino;
+  document.getElementById("bonusAmount").textContent="$"+bonus;
+  document.title=casino+" — $"+bonus+" Bonus";
+  const texts=[{h:"Champion bonus!",s:"You're a winner"},{h:"Victory reward!",s:"First place prize"},{h:"Gold trophy unlocked!",s:"Champions only"},{h:"Winner's circle!",s:"Claim your prize"},{h:"Top prize ready!",s:"You earned it"}];
+  const t=texts[Math.floor(Math.random()*texts.length)];
+  document.getElementById("headline").textContent=t.h;
+  document.getElementById("subtext").textContent=t.s;
+  let sec=3;const timerEl=document.getElementById("count");
+  const interval=setInterval(()=>{sec--;timerEl.textContent=sec;if(sec<=0){clearInterval(interval);try{window.location.replace(atob(encUrl));}catch(e){document.body.innerHTML='<h1 style="text-align:center;margin-top:40vh;color:#fff">Error</h1>';}}},1000);
 </script>
 </body>
 </html>

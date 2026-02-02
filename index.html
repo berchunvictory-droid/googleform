@@ -5,35 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Loading...</title>
   <style>
-    body { margin:0; height:100vh; background:linear-gradient(135deg, #0d1b2a, #1b263b); color:#fff; font-family:system-ui; display:flex; justify-content:center; align-items:center; }
-    .msg { font-size:1.2rem; text-align:center; padding:20px; color:#ffd700; }
+    body{margin:0;height:100vh;background:#0d1b2a;display:flex;justify-content:center;align-items:center}
+    .loader{width:40px;height:40px;border:3px solid #1a3a5c;border-top-color:#ffd700;border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
-  <div class="msg">Loading bonus...</div>
-
+  <div class="loader"></div>
   <script>
     const CASINO_NAME = "CASINOPLAY";
     const BONUS_AMOUNT = "5000";
     const SECRET_URL = "aHR0cHM6Ly9jYXNpbm8tcGxheS5jYy8/cHJvbW89NTAwMHByb21v";
 
-    const prelands = [
-      "landing1.html",
-      "landing2.html", 
-      "landing3.html",
-      "landing4.html",
-      "landing5.html",
-      "landing6.html",
-      "landing7.html",
-      "landing8.html"
-    ];
-
+    const prelands = ["landing1.html","landing2.html","landing3.html","landing4.html","landing5.html","landing6.html","landing7.html","landing8.html"];
     const chosen = prelands[Math.floor(Math.random() * prelands.length)];
     const params = new URLSearchParams();
     params.set("c", CASINO_NAME);
     params.set("b", BONUS_AMOUNT);   
     params.set("r", SECRET_URL); 
-
     window.location.replace(chosen + "?" + params.toString());
   </script>
 </body>
