@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title></title>
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { min-height:100vh; background:#1a0a1a; color:#fff; font-family:system-ui,-apple-system,sans-serif; display:flex; justify-content:center; align-items:center; padding:15px; overflow:hidden; }
+    .container { text-align:center; padding:30px 20px; background:linear-gradient(145deg, #2d0a2d, #1a0a1a); border-radius:20px; border:2px solid #ff1493; box-shadow:0 0 50px #ff149366, inset 0 0 30px rgba(255,20,147,0.1); width:100%; max-width:400px; position:relative; }
+    .logo { font-size:clamp(1.8rem, 7vw, 2.8rem); font-weight:900; color:#ff1493; text-shadow:0 0 20px #ff1493, 0 0 40px #ff149366; margin-bottom:15px; word-break:break-word; animation:glow 2s ease-in-out infinite alternate; }
+    .stars { font-size:1.5rem; margin-bottom:15px; }
+    .bonus-box { background:linear-gradient(135deg, #ff1493, #ff69b4); padding:12px 25px; border-radius:12px; display:inline-block; margin-bottom:20px; }
+    .bonus-box span { font-size:clamp(1.5rem, 6vw, 2.2rem); font-weight:900; color:#fff; text-shadow:2px 2px 4px rgba(0,0,0,0.3); }
+    .timer { font-size:clamp(4rem, 18vw, 6rem); font-weight:900; color:#fff; text-shadow:0 0 30px #ff1493; margin:15px 0; }
+    h2 { font-size:clamp(1.1rem, 4.5vw, 1.5rem); margin:0 0 12px; line-height:1.4; }
+    p { font-size:clamp(0.9rem, 3.5vw, 1.1rem); color:#ffb6c1; line-height:1.4; }
+    @keyframes glow { from{text-shadow:0 0 20px #ff1493, 0 0 40px #ff149366;} to{text-shadow:0 0 30px #ff1493, 0 0 60px #ff1493;} }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="logo" id="casinoName"></div>
+  <div class="stars">⭐ ⭐ ⭐ ⭐ ⭐</div>
+  <div class="bonus-box"><span id="bonusAmount"></span></div>
+  <h2 id="headline"></h2>
+  <div class="timer" id="count">3</div>
+  <p id="subtext"></p>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const casino = params.get("c") || "CASINO";
+  const bonus  = params.get("b") || "5000";
+  const encUrl = params.get("r");
+
+  if (!encUrl) {
+    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;font-size:1.5rem;padding:20px;">Invalid link</h1>';
+    throw new Error("No redirect parameter");
+  }
+
+  document.getElementById("casinoName").textContent = casino;
+  document.getElementById("bonusAmount").textContent = "$" + bonus + " BONUS";
+  document.title = casino + " — $" + bonus + " Bonus";
+
+  const texts = [
+    { h: `VIP bonus unlocked!`, p: `$${bonus} exclusive reward` },
+    { h: `Jackpot bonus ready!`, p: `Claim your $${bonus} now` },
+    { h: `You hit the bonus!`, p: `$${bonus} added to start` },
+    { h: `Lucky player selected!`, p: `$${bonus} bonus is yours` },
+    { h: `Mega bonus activated!`, p: `$${bonus} waiting for you` }
+  ];
+
+  const randomText = texts[Math.floor(Math.random() * texts.length)];
+  document.getElementById("headline").textContent = randomText.h;
+  document.getElementById("subtext").textContent = randomText.p;
+
+  let sec = 3;
+  const timerEl = document.getElementById("count");
+
+  const interval = setInterval(() => {
+    sec--;
+    timerEl.textContent = sec;
+    if (sec <= 0) {
+      clearInterval(interval);
+      try { window.location.replace(atob(encUrl)); }
+      catch(e) { document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;">Redirect error</h1>'; }
+    }
+  }, 1000);
+</script>
+</body>
+</html>

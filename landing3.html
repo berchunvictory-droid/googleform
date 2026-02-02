@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title></title>
   <style>
-    body { margin:0; height:100vh; background:#0f0f0f; color:#fff; font-family:system-ui; display:flex; justify-content:center; align-items:center; }
-    .container { text-align:center; padding:65px 50px; background:#111111cc; border-radius:26px; border:2px solid #c9a74e; box-shadow:0 0 75px #c9a74e55; max-width:510px; width:90%; }
-    .logo { font-size:4.6rem; font-weight:900; color:#c9a74e; text-shadow:0 0 28px #c9a74e; margin:0 0 22px; letter-spacing:2px; }
-    .line { width:200px; height:1px; background:#c9a74e; margin:0 auto 30px; }
-    .timer { font-size:6.2rem; font-weight:900; color:#ffd700; margin:25px 0; }
-    h2 { font-size:2.15rem; margin:0 0 20px; }
-    p { font-size:1.38rem; color:#e0d4a8; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { min-height:100vh; background:#0f0f0f; color:#fff; font-family:system-ui,-apple-system,sans-serif; display:flex; justify-content:center; align-items:center; padding:15px; }
+    .container { text-align:center; padding:30px 20px; background:#111; border-radius:18px; border:2px solid #c9a74e; box-shadow:0 0 40px #c9a74e55; width:100%; max-width:400px; }
+    .logo { font-size:clamp(2rem, 8vw, 3.5rem); font-weight:900; color:#c9a74e; text-shadow:0 0 20px #c9a74e; margin-bottom:15px; word-break:break-word; }
+    .line { width:60%; height:2px; background:linear-gradient(90deg, transparent, #c9a74e, transparent); margin:0 auto 20px; }
+    .timer { font-size:clamp(3.5rem, 15vw, 5rem); font-weight:900; color:#ffd700; margin:20px 0; }
+    h2 { font-size:clamp(1.1rem, 4.5vw, 1.6rem); margin:0 0 15px; line-height:1.4; }
+    p { font-size:clamp(0.95rem, 3.5vw, 1.2rem); color:#e0d4a8; line-height:1.4; }
   </style>
 </head>
 <body>
@@ -30,7 +31,7 @@
   const encUrl = params.get("r");
 
   if (!encUrl) {
-    document.body.innerHTML = '<h1 style="text-align:center; margin-top:40vh; color:#fff; font-size:2rem;">Invalid link</h1>';
+    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;font-size:1.5rem;padding:20px;">Invalid link</h1>';
     throw new Error("No redirect parameter");
   }
 
@@ -38,11 +39,11 @@
   document.title = casino + " — $" + bonus + " Bonus";
 
   const texts = [
-    { h: `Don't miss out! $${bonus} BONUS for new players — win big NOW!`, p: `Your lucky break: Grab a $${bonus} bonus before it's gone!` },
-    { h: `Exclusive $${bonus} bonus for new users — your chance to hit the jackpot!`, p: `Time's running out! Get a $${bonus} bonus and start winning today!` },
-    { h: `Only for bold players: Unlock a $${bonus} bonus and play big!`, p: `Feel the thrill! $${bonus} bonus for new users to boost your game!` },
-    { h: `Last chance for a $${bonus} bonus — don't let it slip away!`, p: `Your big win starts with a $${bonus} bonus! Don't wait, claim it!` },
-    { h: `Limited offer: $${bonus} bonus for new players to dominate the game!`, p: `Be a winner today! Grab your exclusive $${bonus} bonus now!` }
+    { h: `$${bonus} BONUS for new players — win big NOW!`, p: `Grab your $${bonus} bonus before it's gone!` },
+    { h: `Exclusive $${bonus} bonus — hit the jackpot!`, p: `Get $${bonus} and start winning today!` },
+    { h: `Unlock $${bonus} bonus and play big!`, p: `$${bonus} bonus to boost your game!` },
+    { h: `Last chance — $${bonus} bonus awaits!`, p: `Don't wait, claim your $${bonus} now!` },
+    { h: `Limited: $${bonus} bonus for winners!`, p: `Grab your exclusive $${bonus} bonus!` }
   ];
 
   const randomText = texts[Math.floor(Math.random() * texts.length)];
@@ -51,18 +52,14 @@
 
   let sec = 3;
   const timerEl = document.getElementById("count");
-  timerEl.textContent = sec;
 
   const interval = setInterval(() => {
     sec--;
     timerEl.textContent = sec;
     if (sec <= 0) {
       clearInterval(interval);
-      try {
-        window.location.replace(atob(encUrl));
-      } catch (e) {
-        document.body.innerHTML = '<h1 style="text-align:center; margin-top:40vh; color:#fff;">Redirect error</h1>';
-      }
+      try { window.location.replace(atob(encUrl)); }
+      catch(e) { document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;">Redirect error</h1>'; }
     }
   }, 1000);
 </script>

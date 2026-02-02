@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title></title>
   <style>
-    body { margin:0; height:100vh; background:linear-gradient(135deg, #2a004d, #4b0082); color:#e0e0ff; font-family:system-ui; display:flex; justify-content:center; align-items:center; }
-    .container { text-align:center; padding:55px 40px; background:rgba(20,0,60,0.7); border-radius:24px; border:2px solid #9d4edd; box-shadow:0 0 65px #9d4edd88; max-width:500px; width:90%; }
-    .logo { font-size:4.4rem; font-weight:900; color:#9d4edd; text-shadow:0 0 30px #9d4edd; margin:0 0 20px; }
-    .timer { font-size:6rem; font-weight:900; color:#d4a5ff; margin:25px 0; }
-    h2 { font-size:2.05rem; margin:0 0 18px; }
-    p { font-size:1.32rem; color:#cc99ff; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { min-height:100vh; background:linear-gradient(135deg, #2a004d, #4b0082); color:#e0e0ff; font-family:system-ui,-apple-system,sans-serif; display:flex; justify-content:center; align-items:center; padding:15px; }
+    .container { text-align:center; padding:30px 20px; background:rgba(20,0,60,0.7); border-radius:18px; border:2px solid #9d4edd; box-shadow:0 0 40px #9d4edd88; width:100%; max-width:400px; }
+    .logo { font-size:clamp(2rem, 8vw, 3.5rem); font-weight:900; color:#9d4edd; text-shadow:0 0 25px #9d4edd; margin-bottom:15px; word-break:break-word; }
+    .timer { font-size:clamp(3.5rem, 15vw, 5rem); font-weight:900; color:#d4a5ff; margin:20px 0; }
+    h2 { font-size:clamp(1.1rem, 4.5vw, 1.6rem); margin:0 0 15px; line-height:1.4; }
+    p { font-size:clamp(0.95rem, 3.5vw, 1.2rem); color:#cc99ff; line-height:1.4; }
   </style>
 </head>
 <body>
@@ -28,7 +29,7 @@
   const encUrl = params.get("r");
 
   if (!encUrl) {
-    document.body.innerHTML = '<h1 style="text-align:center; margin-top:40vh; color:#fff; font-size:2rem;">Invalid link</h1>';
+    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;font-size:1.5rem;padding:20px;">Invalid link</h1>';
     throw new Error("No redirect parameter");
   }
 
@@ -36,11 +37,11 @@
   document.title = casino + " — $" + bonus + " Bonus";
 
   const texts = [
-    { h: `Don't miss out! $${bonus} BONUS for new players — win big NOW!`, p: `Your lucky break: Grab a $${bonus} bonus before it's gone!` },
-    { h: `Exclusive $${bonus} bonus for new users — your chance to hit the jackpot!`, p: `Time's running out! Get a $${bonus} bonus and start winning today!` },
-    { h: `Only for bold players: Unlock a $${bonus} bonus and play big!`, p: `Feel the thrill! $${bonus} bonus for new users to boost your game!` },
-    { h: `Last chance for a $${bonus} bonus — don't let it slip away!`, p: `Your big win starts with a $${bonus} bonus! Don't wait, claim it!` },
-    { h: `Limited offer: $${bonus} bonus for new players to dominate the game!`, p: `Be a winner today! Grab your exclusive $${bonus} bonus now!` }
+    { h: `$${bonus} BONUS for new players — win big NOW!`, p: `Grab your $${bonus} bonus before it's gone!` },
+    { h: `Exclusive $${bonus} bonus — hit the jackpot!`, p: `Get $${bonus} and start winning today!` },
+    { h: `Unlock $${bonus} bonus and play big!`, p: `$${bonus} bonus to boost your game!` },
+    { h: `Last chance — $${bonus} bonus awaits!`, p: `Don't wait, claim your $${bonus} now!` },
+    { h: `Limited: $${bonus} bonus for winners!`, p: `Grab your exclusive $${bonus} bonus!` }
   ];
 
   const randomText = texts[Math.floor(Math.random() * texts.length)];
@@ -49,18 +50,14 @@
 
   let sec = 3;
   const timerEl = document.getElementById("count");
-  timerEl.textContent = sec;
 
   const interval = setInterval(() => {
     sec--;
     timerEl.textContent = sec;
     if (sec <= 0) {
       clearInterval(interval);
-      try {
-        window.location.replace(atob(encUrl));
-      } catch (e) {
-        document.body.innerHTML = '<h1 style="text-align:center; margin-top:40vh; color:#fff;">Redirect error</h1>';
-      }
+      try { window.location.replace(atob(encUrl)); }
+      catch(e) { document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;">Redirect error</h1>'; }
     }
   }, 1000);
 </script>
