@@ -4,65 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title></title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin:0; height:100vh; background:#000;
-      font-family:'Press Start 2P', cursive; color:#0f0;
-      image-rendering:pixelated; overflow:hidden;
-      background-image: repeating-linear-gradient(
-        to bottom, transparent 0px, transparent 2px, rgba(0,255,0,0.06) 2px, rgba(0,255,0,0.06) 4px
-      );
-    }
-    .crt {
-      position:relative; width:100%; height:100%; display:flex; flex-direction:column;
-      justify-content:center; align-items:center; padding:20px; box-sizing:border-box;
-    }
-    .crt::before {
-      content:""; position:absolute; inset:0; pointer-events:none;
-      background:radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,0.8) 100%);
-      mix-blend-mode:multiply;
-    }
-    .logo { font-size:3.2rem; color:#0f0; text-shadow:0 0 10px #0f0; margin-bottom:30px; }
-    .bonus { font-size:5.5rem; color:#ff0; text-shadow:0 0 20px #ff0; margin:20px 0; }
-    h2 { font-size:1.4rem; color:#0f8; line-height:1.6; max-width:90%; text-align:center; }
-    p { font-size:1.1rem; color:#0c8; opacity:0.8; }
+    body { margin:0; height:100vh; background:#0f0f0f; color:#fff; font-family:system-ui; display:flex; justify-content:center; align-items:center; }
+    .container { text-align:center; padding:65px 50px; background:#111111cc; border-radius:26px; border:2px solid #c9a74e; box-shadow:0 0 75px #c9a74e55; max-width:510px; width:90%; }
+    .logo { font-size:4.6rem; font-weight:900; color:#c9a74e; text-shadow:0 0 28px #c9a74e; margin:0 0 22px; letter-spacing:2px; }
+    .line { width:200px; height:1px; background:#c9a74e; margin:0 auto 30px; }
+    .timer { font-size:6.2rem; font-weight:900; color:#ffd700; margin:25px 0; }
+    h2 { font-size:2.15rem; margin:0 0 20px; }
+    p { font-size:1.38rem; color:#e0d4a8; }
   </style>
 </head>
 <body>
-<div class="crt">
+<div class="container">
   <div class="logo" id="casinoName"></div>
-  <div class="bonus" id="bonusAmount"></div>
+  <div class="line"></div>
   <h2 id="headline"></h2>
+  <div class="timer" id="count">3</div>
   <p id="subtext"></p>
 </div>
 
 <script>
+  const params = new URLSearchParams(window.location.search);
+  const casino = decodeURIComponent(params.get("c") || "CASINO");
+  const bonus  = params.get("b") || "5000";
+  const encUrl = params.get("r");
 
-const params = new URLSearchParams(window.location.search);
-const casino = decodeURIComponent(params.get("c") || "CASINO");
-const bonus  = params.get("b") || "5000";
-const encUrl = params.get("r");
-
-if (!encUrl) throw new Error("No redirect");
-
-document.getElementById("casinoName").textContent = casino;
-document.getElementById("bonusAmount").textContent = "$" + bonus;
-document.title = casino + " – $" + bonus + " Bonus";
-
-const texts = [ /* те же 5 вариантов, что в предыдущем примере */ ];
-const randomText = texts[Math.floor(Math.random() * texts.length)];
-document.getElementById("headline").textContent = randomText.h;
-document.getElementById("subtext").textContent = randomText.p;
-
-let sec = 3;
-const interval = setInterval(() => {
-  if (--sec <= 0) {
-    clearInterval(interval);
-    try { location.replace(atob(encUrl)); }
-    catch(e) { document.body.innerHTML = '<h1>ERROR</h1>'; }
+  if (!encUrl) {
+    document.body.innerHTML = '<h1 style="text-align:center; margin-top:40vh; color:#fff; font-size:2rem;">Invalid link</h1>';
+    throw new Error("No redirect parameter");
   }
-}, 1000);
+
+  document.getElementById("casinoName").textContent = casino;
+  document.getElementById("bonusAmount").textContent = "$" + bonus;
+  document.title = casino + " – $" + bonus + " Bonus";
+
+  const texts = [
+    { h: `Don't miss out! $${bonus} BONUS for new players – win big NOW!`, p: "Your lucky break: Grab a $${bonus} bonus before it’s gone!" },
+    { h: `Exclusive $${bonus} bonus for new users – your chance to hit the jackpot!`, p: "Time’s running out! Get a $${bonus} bonus and start winning today!" },
+    { h: `Only for bold players: Unlock a $${bonus} bonus and play big!`, p: "Feel the thrill! $${bonus} bonus for new users to boost your game!" },
+    { h: `Last chance for a $${bonus} bonus – don’t let it slip away!`, p: "Your big win starts with a $${bonus} bonus! Don’t wait, claim it" },
+    { h: `Limited offer: $${bonus} bonus for new players to dominate the game!`, p: "Be a winner today! Grab your exclusive $${bonus} bonus now!" }
+  ];
+
+  const randomText = texts[Math.floor(Math.random() * texts.length)];
+  document.getElementById("headline").textContent = randomText.h;
+  document.getElementById("subtext").textContent = randomText.p;
+
+  let sec = 3;
+  const timerEl = document.getElementById("count");
+  timerEl.textContent = sec;
+
+  const interval = setInterval(() => {
+    sec--;
+    timerEl.textContent = sec;
+    if (sec <= 0) {
+      clearInterval(interval);
+      try {
+        window.location.replace(atob(encUrl));
+      } catch (e) {
+        document.body.innerHTML = '<h1 style="text-align:center; margin-top:40vh; color:#fff;">Redirect error</h1>';
+      }
+    }
+  }, 1000);
 </script>
 </body>
 </html>
