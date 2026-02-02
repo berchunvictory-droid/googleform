@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin:0; height:100vh; background:#000; color:#fff;
+      font-family:'Orbitron', monospace; overflow:hidden;
+      display:flex; justify-content:center; align-items:center;
+    }
+    .glass {
+      position:relative; width:90%; max-width:600px; padding:80px 40px;
+      background:rgba(255,255,255,0.04); backdrop-filter:blur(16px);
+      border:1px solid rgba(255,255,255,0.08); border-radius:32px;
+      box-shadow:0 8px 32px rgba(0,0,0,0.6);
+      text-align:center;
+    }
+    .logo {
+      font-size:3.8rem; font-weight:900; letter-spacing:6px;
+      background:linear-gradient(90deg, #ff00cc, #00ffcc); -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent; margin:0 0 40px;
+    }
+    .timer {
+      font-size:9rem; font-weight:900; line-height:0.9;
+      background:linear-gradient(90deg, #00ffcc, #ff00cc); -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent; margin:0;
+    }
+    h2 { font-size:2.1rem; margin:40px 0 20px; opacity:0.9; }
+    p { font-size:1.3rem; opacity:0.7; }
+  </style>
+</head>
+<body>
+<div class="glass">
+  <div class="logo" id="casinoName"></div>
+  <div class="timer" id="bonusAmount"></div>
+  <h2 id="headline"></h2>
+  <p id="subtext"></p>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const casino = decodeURIComponent(params.get("c") || "CASINO");
+const bonus  = params.get("b") || "5000";
+const encUrl = params.get("r");
+
+if (!encUrl) throw new Error("No redirect");
+
+document.getElementById("casinoName").textContent = casino;
+document.getElementById("bonusAmount").textContent = "$" + bonus;
+document.title = casino + " – $" + bonus + " Bonus";
+
+const texts = [
+  { h: "Don’t miss out! $" + bonus + " BONUS for new players – win big NOW!", p: "Your lucky break is waiting!" },
+  { h: "Exclusive $" + bonus + " bonus – your chance to hit the jackpot!", p: "Thousands are winning right now!" },
+  { h: "Last chance! $" + bonus + " BONUS – don’t let it slip away!", p: "Claim it before time runs out!" },
+  { h: "Only for bold players: Unlock $" + bonus + " bonus and play big!", p: "Your big win starts here!" },
+  { h: "Time’s running out! Get your $" + bonus + " bonus and start winning TODAY!", p: "Grab it fast!" }
+];
+
+const randomText = texts[Math.floor(Math.random() * texts.length)];
+document.getElementById("headline").textContent = randomText.h;
+document.getElementById("subtext").textContent = randomText.p;
+
+let sec = 3;
+const interval = setInterval(() => {
+  if (--sec <= 0) {
+    clearInterval(interval);
+    try { location.replace(atob(encUrl)); }
+    catch(e) { document.body.innerHTML = '<h1>Error</h1>'; }
+  }
+}, 1000);
+</script>
+</body>
+</html>
