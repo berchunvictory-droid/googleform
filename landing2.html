@@ -26,7 +26,7 @@
 
 <script>
   const params = new URLSearchParams(window.location.search);
-  const casino = decodeURIComponent(params.get("c") || "CASINO");
+  const casino = params.get("c") || "CASINO";
   const bonus  = params.get("b") || "5000";
   const encUrl = params.get("r");
 
@@ -36,15 +36,14 @@
   }
 
   document.getElementById("casinoName").textContent = casino;
-  document.getElementById("bonusAmount").textContent = "$" + bonus;
-  document.title = casino + " – $" + bonus + " Bonus";
+  document.title = casino + " — $" + bonus + " Bonus";
 
   const texts = [
-    { h: `Don't miss out! $${bonus} BONUS for new players – win big NOW!`, p: "Your lucky break: Grab a $${bonus} bonus before it’s gone!" },
-    { h: `Exclusive $${bonus} bonus for new users – your chance to hit the jackpot!`, p: "Time’s running out! Get a $${bonus} bonus and start winning today!" },
-    { h: `Only for bold players: Unlock a $${bonus} bonus and play big!`, p: "Feel the thrill! $${bonus} bonus for new users to boost your game!" },
-    { h: `Last chance for a $${bonus} bonus – don’t let it slip away!`, p: "Your big win starts with a $${bonus} bonus! Don’t wait, claim it" },
-    { h: `Limited offer: $${bonus} bonus for new players to dominate the game!`, p: "Be a winner today! Grab your exclusive $${bonus} bonus now!" }
+    { h: `Don't miss out! $${bonus} BONUS for new players — win big NOW!`, p: `Your lucky break: Grab a $${bonus} bonus before it's gone!` },
+    { h: `Exclusive $${bonus} bonus for new users — your chance to hit the jackpot!`, p: `Time's running out! Get a $${bonus} bonus and start winning today!` },
+    { h: `Only for bold players: Unlock a $${bonus} bonus and play big!`, p: `Feel the thrill! $${bonus} bonus for new users to boost your game!` },
+    { h: `Last chance for a $${bonus} bonus — don't let it slip away!`, p: `Your big win starts with a $${bonus} bonus! Don't wait, claim it!` },
+    { h: `Limited offer: $${bonus} bonus for new players to dominate the game!`, p: `Be a winner today! Grab your exclusive $${bonus} bonus now!` }
   ];
 
   const randomText = texts[Math.floor(Math.random() * texts.length)];

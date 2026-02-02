@@ -43,9 +43,9 @@
     // Рандомный выбор
     const chosen = prelands[Math.floor(Math.random() * prelands.length)];
 
-    // Параметры БЕЗ лишнего кодирования для Base64
+    // Параметры — НЕ кодируем casino name, чтобы избежать двойного кодирования
     const params = new URLSearchParams();
-    params.set("c", encodeURIComponent(CASINO_NAME));
+    params.set("c", CASINO_NAME);
     params.set("b", BONUS_AMOUNT);   
     params.set("r", SECRET_URL); 
 
