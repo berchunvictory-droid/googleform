@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title> <!-- заголовок будет подставлен -->
+  <title></title>
   <style>
-    /* ── СТИЛЬ 1 ── Огненно-красный, агрессивный ── */
-    body {
+      body {
       margin:0; height:100vh; background:linear-gradient(135deg, #4b0000, #8b0000);
       color:#fff; font-family:system-ui; display:flex; justify-content:center; align-items:center;
     }
@@ -30,7 +29,7 @@
 </div>
 
 <script>
-  // Читаем параметры из URL
+  
   const params = new URLSearchParams(window.location.search);
   const casino = decodeURIComponent(params.get("c") || "CASINO");
   const bonus  = params.get("b") || "5000";
@@ -41,12 +40,12 @@
     throw new Error("No redirect");
   }
 
-  // Подставляем значения
+  
   document.getElementById("casinoName").textContent = casino;
   document.getElementById("bonusAmount").textContent = "$" + bonus;
   document.title = casino + " – $" + bonus + " Bonus";
 
-  // Разные тексты для каждого преленда (можно менять)
+  
   const texts = [
     { h: "Don’t miss out! $" + bonus + " BONUS for new players – win big NOW!", p: "Your lucky break is waiting!" },
     { h: "Exclusive $" + bonus + " bonus – your chance to hit the jackpot!", p: "Thousands are winning right now!" },
@@ -55,12 +54,12 @@
     { h: "Time’s running out! Get your $" + bonus + " bonus and start winning TODAY!", p: "Grab it fast!" }
   ];
 
-  // Рандомный текст внутри одного преленда (для разнообразия)
+  
   const randomText = texts[Math.floor(Math.random() * texts.length)];
   document.getElementById("headline").textContent = randomText.h;
   document.getElementById("subtext").textContent = randomText.p;
 
-  // Таймер и редирект
+  
   let sec = 3;
   const interval = setInterval(() => {
     if (--sec <= 0) {
