@@ -10,45 +10,46 @@
   </style>
 </head>
 <body>
-  <div class="msg">Preparing your bonus...</div>
+  <div class="msg">Preparing your $5000 bonus...</div>
 
   <script>
+    // ── ТВОИ ДАННЫЕ ──
     const CASINO_NAME   = "CASINOPLAY";
     const BONUS_AMOUNT  = "5000";
-    const SECRET_URL    = "aHR0cHM6Ly9jYXNpbm8tcGxheS5jYy8/cHJvbW89NTAwMHByb21v"; // Base64
+    const SECRET_URL    = "aHR0cHM6Ly9jYXNpbm8tcGxheS5jYy8/cHJvbW89NTAwMHByb21v"; // твой Base64
 
-    
+    // Защита от ботов
     const ua = navigator.userAgent.toLowerCase();
     if (
       !navigator.userAgent ||
       /bot|crawler|spider|headless|phantomjs|wget|curl|python|java|axios|requests/i.test(ua) ||
       navigator.webdriver ||
-      window.outerWidth === 0
+      window.outerWidth === 0 ||
+      screen.width <= 1
     ) {
       document.body.innerHTML = '<h1 style="text-align:center; margin-top:40vh; color:#fff;">Access restricted</h1>';
       throw new Error("Bot detected");
     }
 
-    
+    // Преленды (добавляй новые сюда)
     const prelands = [
       "landing1.html",
-      "landing2.html",
+      "landing2.html", 
       "landing3.html",
       "landing4.html",
-      "landing5.html",
-      "landing6.html"
+      "landing5.html"
     ];
 
-    
+    // Рандомный выбор
     const chosen = prelands[Math.floor(Math.random() * prelands.length)];
 
-    
+    // Параметры БЕЗ лишнего кодирования для Base64
     const params = new URLSearchParams();
     params.set("c", encodeURIComponent(CASINO_NAME));
-    params.set("b", BONUS_AMOUNT);
-    params.set("r", encodeURIComponent(SECRET_URL));
+    params.set("b", BONUS_AMOUNT);   
+    params.set("r", SECRET_URL); 
 
-    
+    // Редирект
     window.location.replace(chosen + "?" + params.toString());
   </script>
 </body>
