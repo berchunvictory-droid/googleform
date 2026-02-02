@@ -3,22 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loading exclusive offer...</title>
+  <title>Loading...</title>
   <style>
-    body { margin:0; height:100vh; background:#000; color:#fff; font-family:sans-serif; display:flex; justify-content:center; align-items:center; }
-    .msg { font-size:1.5rem; text-align:center; padding:20px; }
+    body { margin:0; height:100vh; background:linear-gradient(135deg, #0d1b2a, #1b263b); color:#fff; font-family:system-ui; display:flex; justify-content:center; align-items:center; }
+    .msg { font-size:1.2rem; text-align:center; padding:20px; color:#ffd700; }
   </style>
 </head>
 <body>
-  <div class="msg">Preparing your $5000 bonus...</div>
+  <div class="msg">Loading bonus...</div>
 
   <script>
-    // ── ТВОИ ДАННЫЕ ──
-    const CASINO_NAME   = "CASINOPLAY";
-    const BONUS_AMOUNT  = "5000";
-    const SECRET_URL    = "aHR0cHM6Ly9jYXNpbm8tcGxheS5jYy8/cHJvbW89NTAwMHByb21v";
+    const CASINO_NAME = "CASINOPLAY";
+    const BONUS_AMOUNT = "5000";
+    const SECRET_URL = "aHR0cHM6Ly9jYXNpbm8tcGxheS5jYy8/cHJvbW89NTAwMHByb21v";
 
-    // Преленды
     const prelands = [
       "landing1.html",
       "landing2.html", 
@@ -30,16 +28,12 @@
       "landing8.html"
     ];
 
-    // Рандомный выбор
     const chosen = prelands[Math.floor(Math.random() * prelands.length)];
-
-    // Параметры
     const params = new URLSearchParams();
     params.set("c", CASINO_NAME);
     params.set("b", BONUS_AMOUNT);   
     params.set("r", SECRET_URL); 
 
-    // Редирект
     window.location.replace(chosen + "?" + params.toString());
   </script>
 </body>

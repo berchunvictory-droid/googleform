@@ -5,66 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title></title>
   <style>
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { min-height:100vh; background:#1a0a1a; color:#fff; font-family:system-ui,-apple-system,sans-serif; display:flex; justify-content:center; align-items:center; padding:15px; overflow:hidden; }
-    .container { text-align:center; padding:30px 20px; background:linear-gradient(145deg, #2d0a2d, #1a0a1a); border-radius:20px; border:2px solid #ff1493; box-shadow:0 0 50px #ff149366, inset 0 0 30px rgba(255,20,147,0.1); width:100%; max-width:400px; position:relative; }
-    .logo { font-size:clamp(1.8rem, 7vw, 2.8rem); font-weight:900; color:#ff1493; text-shadow:0 0 20px #ff1493, 0 0 40px #ff149366; margin-bottom:15px; word-break:break-word; animation:glow 2s ease-in-out infinite alternate; }
-    .stars { font-size:1.5rem; margin-bottom:15px; }
-    .bonus-box { background:linear-gradient(135deg, #ff1493, #ff69b4); padding:12px 25px; border-radius:12px; display:inline-block; margin-bottom:20px; }
-    .bonus-box span { font-size:clamp(1.5rem, 6vw, 2.2rem); font-weight:900; color:#fff; text-shadow:2px 2px 4px rgba(0,0,0,0.3); }
-    .timer { font-size:clamp(4rem, 18vw, 6rem); font-weight:900; color:#fff; text-shadow:0 0 30px #ff1493; margin:15px 0; }
-    h2 { font-size:clamp(1.1rem, 4.5vw, 1.5rem); margin:0 0 12px; line-height:1.4; }
-    p { font-size:clamp(0.9rem, 3.5vw, 1.1rem); color:#ffb6c1; line-height:1.4; }
-    @keyframes glow { from{text-shadow:0 0 20px #ff1493, 0 0 40px #ff149366;} to{text-shadow:0 0 30px #ff1493, 0 0 60px #ff1493;} }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;background:linear-gradient(135deg,#1a0a00,#2d1400,#1a0a00);color:#fff;font-family:system-ui,-apple-system,sans-serif;display:flex;justify-content:center;align-items:center;padding:15px}
+    .container{text-align:center;padding:35px 25px;background:linear-gradient(180deg,rgba(45,20,0,0.9),rgba(26,10,0,0.95));border-radius:16px;border:2px solid #f97316;box-shadow:0 0 60px rgba(249,115,22,0.3);width:100%;max-width:420px}
+    .fire{font-size:2.5rem;margin-bottom:10px;animation:burn 0.5s infinite alternate}
+    @keyframes burn{from{transform:scale(1)}to{transform:scale(1.1)}}
+    .logo{font-size:clamp(1.6rem,6vw,2.4rem);font-weight:900;color:#f97316;text-shadow:0 0 20px rgba(249,115,22,0.8);margin-bottom:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hot-badge{display:inline-block;background:linear-gradient(135deg,#f97316,#ea580c);padding:8px 20px;border-radius:20px;margin-bottom:15px}
+    .hot-badge span{font-size:clamp(0.8rem,3vw,1rem);font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:2px}
+    .bonus-amount{font-size:clamp(3rem,13vw,4.5rem);font-weight:900;color:#fbbf24;text-shadow:0 0 30px rgba(251,191,36,0.6);margin:15px 0}
+    .timer{font-size:clamp(4rem,16vw,5.5rem);font-weight:900;color:#f97316;text-shadow:0 0 40px rgba(249,115,22,0.7);margin:20px 0;animation:pulse 1s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
+    .message{font-size:clamp(1rem,4vw,1.25rem);color:#fed7aa;margin-bottom:10px}
+    .submessage{font-size:clamp(0.85rem,3vw,1rem);color:#fb923c}
   </style>
 </head>
 <body>
 <div class="container">
+  <div class="fire">🔥</div>
   <div class="logo" id="casinoName"></div>
-  <div class="stars">⭐ ⭐ ⭐ ⭐ ⭐</div>
-  <div class="bonus-box"><span id="bonusAmount"></span></div>
-  <h2 id="headline"></h2>
+  <div class="hot-badge"><span>Hot Bonus</span></div>
+  <div class="bonus-amount" id="bonusAmount"></div>
+  <div class="message" id="headline"></div>
   <div class="timer" id="count">3</div>
-  <p id="subtext"></p>
+  <div class="submessage" id="subtext"></div>
 </div>
 
 <script>
   const params = new URLSearchParams(window.location.search);
   const casino = params.get("c") || "CASINO";
-  const bonus  = params.get("b") || "5000";
+  const bonus = params.get("b") || "5000";
   const encUrl = params.get("r");
 
   if (!encUrl) {
-    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;font-size:1.5rem;padding:20px;">Invalid link</h1>';
-    throw new Error("No redirect parameter");
+    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#f97316;font-size:1.5rem">Invalid link</h1>';
+    throw new Error("No redirect");
   }
 
   document.getElementById("casinoName").textContent = casino;
-  document.getElementById("bonusAmount").textContent = "$" + bonus + " BONUS";
-  document.title = casino + " — $" + bonus + " Bonus";
+  document.getElementById("bonusAmount").textContent = "$" + bonus;
+  document.title = casino + " — $" + bonus;
 
   const texts = [
-    { h: `VIP bonus unlocked!`, p: `$${bonus} exclusive reward` },
-    { h: `Jackpot bonus ready!`, p: `Claim your $${bonus} now` },
-    { h: `You hit the bonus!`, p: `$${bonus} added to start` },
-    { h: `Lucky player selected!`, p: `$${bonus} bonus is yours` },
-    { h: `Mega bonus activated!`, p: `$${bonus} waiting for you` }
+    {h:"Blazing hot bonus!", s:"Feel the heat..."},
+    {h:"Fire bonus activated!", s:"Burning rewards..."},
+    {h:"Red hot welcome!", s:"Sizzling prize incoming..."},
+    {h:"Inferno bonus!", s:"Maximum heat..."},
+    {h:"Flaming jackpot!", s:"On fire..."}
   ];
-
-  const randomText = texts[Math.floor(Math.random() * texts.length)];
-  document.getElementById("headline").textContent = randomText.h;
-  document.getElementById("subtext").textContent = randomText.p;
+  const t = texts[Math.floor(Math.random()*texts.length)];
+  document.getElementById("headline").textContent = t.h;
+  document.getElementById("subtext").textContent = t.s;
 
   let sec = 3;
   const timerEl = document.getElementById("count");
-
   const interval = setInterval(() => {
     sec--;
     timerEl.textContent = sec;
     if (sec <= 0) {
       clearInterval(interval);
       try { window.location.replace(atob(encUrl)); }
-      catch(e) { document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;">Redirect error</h1>'; }
+      catch(e) { document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff">Error</h1>'; }
     }
   }, 1000);
 </script>

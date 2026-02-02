@@ -5,60 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title></title>
   <style>
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { min-height:100vh; background:#001a00; color:#e0ffe0; font-family:system-ui,-apple-system,sans-serif; display:flex; justify-content:center; align-items:center; padding:15px; }
-    .container { text-align:center; padding:30px 20px; background:linear-gradient(145deg, #003300, #004d00); border-radius:18px; border:2px solid #00ff88; box-shadow:0 0 40px #00ff8866; width:100%; max-width:400px; }
-    .logo { font-size:clamp(2rem, 8vw, 3.5rem); font-weight:900; color:#00ff88; text-shadow:0 0 25px #00ff88; margin-bottom:15px; word-break:break-word; }
-    .timer { font-size:clamp(3.5rem, 15vw, 5rem); font-weight:900; color:#00ff44; margin:20px 0; animation:pulse 1.5s infinite; }
-    h2 { font-size:clamp(1.1rem, 4.5vw, 1.6rem); margin:0 0 15px; line-height:1.4; }
-    p { font-size:clamp(0.95rem, 3.5vw, 1.2rem); color:#99ffcc; line-height:1.4; }
-    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;background:linear-gradient(135deg,#1a0533,#2d1b4e,#1a0533);color:#fff;font-family:system-ui,-apple-system,sans-serif;display:flex;justify-content:center;align-items:center;padding:15px}
+    .container{text-align:center;padding:35px 25px;background:rgba(45,27,78,0.8);border-radius:20px;border:1px solid rgba(168,85,247,0.4);box-shadow:0 0 60px rgba(168,85,247,0.2);width:100%;max-width:420px}
+    .logo{font-size:clamp(1.6rem,6vw,2.4rem);font-weight:900;color:#a855f7;text-shadow:0 0 30px rgba(168,85,247,0.6);margin-bottom:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .orb{width:80px;height:80px;background:radial-gradient(circle,#a855f7,#7c3aed,#4c1d95);border-radius:50%;margin:15px auto;box-shadow:0 0 40px #a855f7,0 0 80px rgba(168,85,247,0.5);animation:glow 2s ease-in-out infinite}
+    @keyframes glow{0%,100%{box-shadow:0 0 40px #a855f7,0 0 80px rgba(168,85,247,0.5)}50%{box-shadow:0 0 60px #a855f7,0 0 100px rgba(168,85,247,0.7)}}
+    .bonus-amount{font-size:clamp(2.8rem,12vw,4rem);font-weight:900;background:linear-gradient(135deg,#ffd700,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:15px 0}
+    .timer{font-size:clamp(4rem,16vw,5.5rem);font-weight:900;color:#e9d5ff;text-shadow:0 0 20px rgba(168,85,247,0.8);margin:15px 0}
+    .message{font-size:clamp(1rem,4vw,1.25rem);color:#e9d5ff;margin-bottom:10px}
+    .submessage{font-size:clamp(0.85rem,3vw,1rem);color:#c084fc}
+    .sparkles{font-size:1.5rem;margin-top:15px}
   </style>
 </head>
 <body>
 <div class="container">
   <div class="logo" id="casinoName"></div>
-  <h2 id="headline"></h2>
+  <div class="orb"></div>
+  <div class="bonus-amount" id="bonusAmount"></div>
+  <div class="message" id="headline"></div>
   <div class="timer" id="count">3</div>
-  <p id="subtext"></p>
+  <div class="submessage" id="subtext"></div>
+  <div class="sparkles">✨ ✨ ✨</div>
 </div>
 
 <script>
   const params = new URLSearchParams(window.location.search);
   const casino = params.get("c") || "CASINO";
-  const bonus  = params.get("b") || "5000";
+  const bonus = params.get("b") || "5000";
   const encUrl = params.get("r");
 
   if (!encUrl) {
-    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;font-size:1.5rem;padding:20px;">Invalid link</h1>';
-    throw new Error("No redirect parameter");
+    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#a855f7;font-size:1.5rem">Invalid link</h1>';
+    throw new Error("No redirect");
   }
 
   document.getElementById("casinoName").textContent = casino;
-  document.title = casino + " — $" + bonus + " Bonus";
+  document.getElementById("bonusAmount").textContent = "$" + bonus;
+  document.title = casino + " — $" + bonus;
 
   const texts = [
-    { h: `$${bonus} BONUS for new players — win big NOW!`, p: `Grab your $${bonus} bonus before it's gone!` },
-    { h: `Exclusive $${bonus} bonus — hit the jackpot!`, p: `Get $${bonus} and start winning today!` },
-    { h: `Unlock $${bonus} bonus and play big!`, p: `$${bonus} bonus to boost your game!` },
-    { h: `Last chance — $${bonus} bonus awaits!`, p: `Don't wait, claim your $${bonus} now!` },
-    { h: `Limited: $${bonus} bonus for winners!`, p: `Grab your exclusive $${bonus} bonus!` }
+    {h:"Magic bonus revealed!", s:"Your reward is ready..."},
+    {h:"Mystic reward unlocked!", s:"Claiming your prize..."},
+    {h:"Fortune awaits you!", s:"The stars align..."},
+    {h:"Enchanted bonus!", s:"Magic is happening..."},
+    {h:"Destiny calls!", s:"Your bonus awaits..."}
   ];
-
-  const randomText = texts[Math.floor(Math.random() * texts.length)];
-  document.getElementById("headline").textContent = randomText.h;
-  document.getElementById("subtext").textContent = randomText.p;
+  const t = texts[Math.floor(Math.random()*texts.length)];
+  document.getElementById("headline").textContent = t.h;
+  document.getElementById("subtext").textContent = t.s;
 
   let sec = 3;
   const timerEl = document.getElementById("count");
-
   const interval = setInterval(() => {
     sec--;
     timerEl.textContent = sec;
     if (sec <= 0) {
       clearInterval(interval);
       try { window.location.replace(atob(encUrl)); }
-      catch(e) { document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;">Redirect error</h1>'; }
+      catch(e) { document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff">Error</h1>'; }
     }
   }, 1000);
 </script>

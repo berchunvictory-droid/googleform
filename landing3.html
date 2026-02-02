@@ -5,61 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title></title>
   <style>
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { min-height:100vh; background:#0f0f0f; color:#fff; font-family:system-ui,-apple-system,sans-serif; display:flex; justify-content:center; align-items:center; padding:15px; }
-    .container { text-align:center; padding:30px 20px; background:#111; border-radius:18px; border:2px solid #c9a74e; box-shadow:0 0 40px #c9a74e55; width:100%; max-width:400px; }
-    .logo { font-size:clamp(2rem, 8vw, 3.5rem); font-weight:900; color:#c9a74e; text-shadow:0 0 20px #c9a74e; margin-bottom:15px; word-break:break-word; }
-    .line { width:60%; height:2px; background:linear-gradient(90deg, transparent, #c9a74e, transparent); margin:0 auto 20px; }
-    .timer { font-size:clamp(3.5rem, 15vw, 5rem); font-weight:900; color:#ffd700; margin:20px 0; }
-    h2 { font-size:clamp(1.1rem, 4.5vw, 1.6rem); margin:0 0 15px; line-height:1.4; }
-    p { font-size:clamp(0.95rem, 3.5vw, 1.2rem); color:#e0d4a8; line-height:1.4; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;background:#0a0a12;color:#fff;font-family:system-ui,-apple-system,sans-serif;display:flex;justify-content:center;align-items:center;padding:15px}
+    .container{text-align:center;padding:35px 25px;background:linear-gradient(180deg,#12121f,#0a0a12);border-radius:16px;border:1px solid #ff2d55;box-shadow:0 0 40px rgba(255,45,85,0.3),0 0 80px rgba(255,45,85,0.1);width:100%;max-width:420px}
+    .logo{font-size:clamp(1.6rem,6vw,2.4rem);font-weight:900;color:#ff2d55;text-shadow:0 0 20px #ff2d55,0 0 40px rgba(255,45,85,0.5);margin-bottom:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:neon 1.5s ease-in-out infinite alternate}
+    @keyframes neon{from{text-shadow:0 0 10px #ff2d55,0 0 20px #ff2d55}to{text-shadow:0 0 20px #ff2d55,0 0 40px #ff2d55,0 0 60px #ff2d55}}
+    .slots{font-size:1.8rem;margin:15px 0;letter-spacing:10px}
+    .bonus-amount{font-size:clamp(2.5rem,11vw,3.8rem);font-weight:900;color:#ffd700;text-shadow:0 0 20px rgba(255,215,0,0.6);margin:10px 0}
+    .timer-wrap{background:linear-gradient(135deg,#ff2d55,#ff6b8a);padding:3px;border-radius:50%;width:100px;height:100px;margin:20px auto;display:flex;align-items:center;justify-content:center}
+    .timer-inner{background:#0a0a12;width:94px;height:94px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+    .timer{font-size:clamp(2.5rem,10vw,3.5rem);font-weight:900;color:#ff2d55}
+    .message{font-size:clamp(1rem,4vw,1.25rem);color:#fff;margin:15px 0 10px}
+    .submessage{font-size:clamp(0.85rem,3vw,1rem);color:#ff6b8a}
+    .stars{color:#ffd700;font-size:1.2rem;margin-top:15px;letter-spacing:5px}
   </style>
 </head>
 <body>
 <div class="container">
   <div class="logo" id="casinoName"></div>
-  <div class="line"></div>
-  <h2 id="headline"></h2>
-  <div class="timer" id="count">3</div>
-  <p id="subtext"></p>
+  <div class="slots">🎰 🎰 🎰</div>
+  <div class="bonus-amount" id="bonusAmount"></div>
+  <div class="message" id="headline"></div>
+  <div class="timer-wrap"><div class="timer-inner"><div class="timer" id="count">3</div></div></div>
+  <div class="submessage" id="subtext"></div>
+  <div class="stars">★ ★ ★ ★ ★</div>
 </div>
 
 <script>
   const params = new URLSearchParams(window.location.search);
   const casino = params.get("c") || "CASINO";
-  const bonus  = params.get("b") || "5000";
+  const bonus = params.get("b") || "5000";
   const encUrl = params.get("r");
 
   if (!encUrl) {
-    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;font-size:1.5rem;padding:20px;">Invalid link</h1>';
-    throw new Error("No redirect parameter");
+    document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#ff2d55;font-size:1.5rem">Invalid link</h1>';
+    throw new Error("No redirect");
   }
 
   document.getElementById("casinoName").textContent = casino;
-  document.title = casino + " — $" + bonus + " Bonus";
+  document.getElementById("bonusAmount").textContent = "$" + bonus;
+  document.title = casino + " — $" + bonus;
 
   const texts = [
-    { h: `$${bonus} BONUS for new players — win big NOW!`, p: `Grab your $${bonus} bonus before it's gone!` },
-    { h: `Exclusive $${bonus} bonus — hit the jackpot!`, p: `Get $${bonus} and start winning today!` },
-    { h: `Unlock $${bonus} bonus and play big!`, p: `$${bonus} bonus to boost your game!` },
-    { h: `Last chance — $${bonus} bonus awaits!`, p: `Don't wait, claim your $${bonus} now!` },
-    { h: `Limited: $${bonus} bonus for winners!`, p: `Grab your exclusive $${bonus} bonus!` }
+    {h:"JACKPOT BONUS!", s:"Spin to win..."},
+    {h:"MEGA WIN READY!", s:"Loading slots..."},
+    {h:"BIG BONUS TIME!", s:"Get ready to play..."},
+    {h:"LUCKY SPIN BONUS!", s:"Your turn is coming..."},
+    {h:"777 BONUS!", s:"Jackpot loading..."}
   ];
-
-  const randomText = texts[Math.floor(Math.random() * texts.length)];
-  document.getElementById("headline").textContent = randomText.h;
-  document.getElementById("subtext").textContent = randomText.p;
+  const t = texts[Math.floor(Math.random()*texts.length)];
+  document.getElementById("headline").textContent = t.h;
+  document.getElementById("subtext").textContent = t.s;
 
   let sec = 3;
   const timerEl = document.getElementById("count");
-
   const interval = setInterval(() => {
     sec--;
     timerEl.textContent = sec;
     if (sec <= 0) {
       clearInterval(interval);
       try { window.location.replace(atob(encUrl)); }
-      catch(e) { document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff;">Redirect error</h1>'; }
+      catch(e) { document.body.innerHTML = '<h1 style="text-align:center;margin-top:40vh;color:#fff">Error</h1>'; }
     }
   }, 1000);
 </script>
