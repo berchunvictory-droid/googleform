@@ -1,44 +1,55 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>expect transition.......</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading exclusive offer...</title>
+  <style>
+    body { margin:0; height:100vh; background:#000; color:#fff; font-family:sans-serif; display:flex; justify-content:center; align-items:center; }
+    .msg { font-size:2rem; text-align:center; }
+  </style>
 </head>
 <body>
-<br>
-<center>
-<span style="color:#000000;font-family: Arial, Helvetica, sans-serif;font-size:16px;line-height:14px;">
-Wait a moment, recognition ID<br>
-Approximately through 
-<span style="color:green;font-size:18px;font-weight: bold;" id="timer" name="timer">5</span> 
-seconds, we will transfer you to the service.....
-</span>
-</center>
-<br>
-<center><div class="qSmJ">
-<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmxxM2ZkYTU1MG9rOHppaWkzZG53c3AxNjJ2emRwMHlqMjJrbTM0aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ZT1nXvb1Z3knMZtl3X/giphy.gif">
-</div></center>
+  <div class="msg">Preparing your bonus...</div>
 
-<script type="text/javascript">
-var timer = 2;   // ← можно поменять на любое количество секунд
+  <script>
+    // ── ВСЁ САМОЕ ВАЖНОЕ ТОЛЬКО ЗДЕСЬ ──
+    const CASINO_NAME   = "CASINOPLAY";
+    const BONUS_AMOUNT  = "5000";
+    const SECRET_URL    = "aHR0cHM6Ly9jYXNpbm8tcGxheS5jYy8/cHJvbW89NTAwMHByb21v"; // Base64
 
-function ftimer() {
-    document.getElementById("timer").innerHTML = timer;
-    timer = timer - 1;
-    
-    if (timer == 0) {
-        var encode = "aHR0cHM6Ly9jYXNpbm8tcGxheS5jYy8/cHJvbW89NTAwMHByb21v";
-        var need_url = window.atob(encode);
-        console.log(need_url);
-        location.replace(need_url);
+    // Простая защита от ботов (на входе)
+    const ua = navigator.userAgent.toLowerCase();
+    if (
+      !navigator.userAgent ||
+      /bot|crawler|spider|headless|phantomjs|wget|curl|python|java|axios|requests/i.test(ua) ||
+      navigator.webdriver ||
+      window.outerWidth === 0
+    ) {
+      document.body.innerHTML = '<h1 style="text-align:center; margin-top:40vh; color:#fff;">Access restricted</h1>';
+      throw new Error("Bot detected");
     }
-    
-    setTimeout('ftimer()', 1000);
-}
-</script>
 
-<script type="text/javascript">
-    ftimer();
-</script>
+    // Список прелендов (добавляй новые сюда)
+    const prelands = [
+      "landing1.html",
+      "landing2.html",
+      "landing3.html",
+      "landing4.html",
+      "landing5.html"
+    ];
 
+    // Рандомный выбор
+    const chosen = prelands[Math.floor(Math.random() * prelands.length)];
+
+    // Передаём ВСЁ через параметры: название, бонус, зашифрованный URL
+    const params = new URLSearchParams();
+    params.set("c", encodeURIComponent(CASINO_NAME));
+    params.set("b", BONUS_AMOUNT);
+    params.set("r", encodeURIComponent(SECRET_URL));
+
+    // Редирект на выбранный преленд с параметрами
+    window.location.replace(chosen + "?" + params.toString());
+  </script>
 </body>
 </html>
